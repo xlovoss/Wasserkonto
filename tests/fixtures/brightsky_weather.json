@@ -1,0 +1,13 @@
+{
+  "weather": [
+    {"timestamp": "2026-11-10T00:00:00+00:00", "precipitation": 0.4,
+     "temperature": 6.1, "relative_humidity": 93, "sunshine": 0,
+     "wind_speed": 11.2, "pressure_msl": 1014.3, "dew_point": 5.0,
+     "solar": null},
+    {"timestamp": "2026-11-10T01:00:00+00:00", "precipitation": 0.0,
+     "temperature": 5.8, "relative_humidity": 94, "sunshine": 0,
+     "wind_speed": 9.4, "pressure_msl": 1014.1, "dew_point": 4.9,
+     "solar": 0.0}
+  ],
+  "sources": [{"id": 1234, "dwd_station_id": "01048", "station_name": "Dresden-Klotzsche"}]
+}

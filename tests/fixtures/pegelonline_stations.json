@@ -1,0 +1,27 @@
+[
+  {
+    "uuid": "47174d8f-1b8e-4599-8a59-b580dd55bc87",
+    "number": "501060",
+    "shortname": "DRESDEN",
+    "longname": "DRESDEN",
+    "km": 55.63,
+    "agency": "DRESDEN",
+    "longitude": 13.738831,
+    "latitude": 51.054459,
+    "water": {"shortname": "ELBE", "longname": "ELBE"},
+    "timeseries": [
+      {"shortname": "W", "longname": "WASSERSTAND ROHDATEN", "unit": "cm"},
+      {"shortname": "Q", "longname": "ABFLUSS", "unit": "m³/s"}
+    ]
+  },
+  {
+    "uuid": "aa2f3d0f-0000-4000-8000-000000000002",
+    "number": "501070",
+    "shortname": "SCHOENA",
+    "longname": "SCHOENA",
+    "longitude": 14.236,
+    "latitude": 50.878,
+    "water": {"shortname": "ELBE", "longname": "ELBE"},
+    "timeseries": [{"shortname": "W", "longname": "WASSERSTAND", "unit": "cm"}]
+  }
+]

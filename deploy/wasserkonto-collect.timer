@@ -1,0 +1,13 @@
+[Unit]
+Description=Collect open water data four times a day
+
+[Timer]
+# Four runs give room to recover from a service being briefly unavailable,
+# while staying far below anything that could burden a public API.
+OnCalendar=*-*-* 02,08,14,20:17:00
+# Spread the load and survive a reboot that missed a tick.
+RandomizedDelaySec=15min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,23 @@
+# The archive itself never belongs in version control.
+data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+config.toml
+
+# Third-party datasets stay outside the repository.
+GEMS-GER_data/
+*.zip
+
+# Derived analysis output
+analysis/out/
+*.parquet
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.DS_Store

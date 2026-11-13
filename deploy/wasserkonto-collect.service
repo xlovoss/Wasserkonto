@@ -1,0 +1,25 @@
+[Unit]
+Description=Collect open water data into the wasserkonto archive
+Documentation=https://github.com/USER/wasserkonto
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=wasserkonto
+WorkingDirectory=/opt/wasserkonto
+ExecStart=/opt/wasserkonto/.venv/bin/wasserkonto --config /opt/wasserkonto/config.toml collect
+
+# A collection run is cheap and idempotent, so a failure is best left to the
+# next timer tick rather than retried in a tight loop.
+TimeoutStartSec=30min
+
+# The job needs its archive and nothing else on the machine.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/wasserkonto/data
+
+[Install]
+WantedBy=multi-user.target

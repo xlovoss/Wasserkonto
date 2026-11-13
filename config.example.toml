@@ -1,0 +1,42 @@
+# Copy to config.toml and edit. config.toml is git-ignored on purpose.
+
+[storage]
+# Relative paths resolve against this file, so a systemd timer and a manual
+# run always reach the same archive.
+root = "./data"
+compress_raw = true
+
+[http]
+# These services are public infrastructure with no rate limit. That is an
+# invitation to be careful, not to hammer them.
+user_agent = "wasserkonto/0.1 (research archive; https://github.com/USER/wasserkonto)"
+timeout_seconds = 30.0
+min_interval_seconds = 1.0
+max_retries = 3
+
+# --- perishable: collect greedily, the window closes -------------------------
+
+[sources.pegelonline]
+enabled = true
+# Leave `stations` empty to take every gauge. The service keeps about 30 days,
+# so a day not collected is lost permanently.
+stations = []
+timeseries = ["W", "Q"]
+lookback_hours = 72
+
+[sources.gwdat]
+# Saxony's daily groundwater snapshot, overwritten every day. Needs the
+# current LfULG download link before it will run.
+enabled = false
+url = ""
+
+# --- archived elsewhere: collect sparingly, it can be backfilled -------------
+
+[sources.brightsky]
+enabled = true
+lookback_days = 3
+points = [
+  { name = "dresden", lat = 51.05, lon = 13.74 },
+  { name = "goerlitz", lat = 51.15, lon = 14.99 },
+  { name = "leipzig", lat = 51.34, lon = 12.37 },
+]

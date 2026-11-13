@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wasserkonto"
+version = "0.1.0"
+description = "An archive and analysis toolkit for German water data"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Leon Maximilian Brade" }]
+keywords = ["hydrology", "groundwater", "open-data", "germany"]
+dependencies = ["requests>=2.31"]
+
+[project.optional-dependencies]
+analysis = ["pandas>=2.0", "numpy>=1.24", "scipy>=1.11", "statsmodels>=0.14", "matplotlib>=3.7"]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[project.scripts]
+wasserkonto = "wasserkonto.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 90
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# The analysis scripts are kept close to the form in which they produced the
+# published numbers. Reformatting them for style would weaken that link, so
+# line length and a few idiom checks are relaxed here and nowhere else.
+"analysis/*" = ["E501", "B905"]
