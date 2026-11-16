@@ -125,17 +125,34 @@ least squares.
 | | NSE median | above 0.5 |
 |---|---|---|
 | calibrated and scored on 1992–2022 | 0.640 | 83.6 % |
-| **calibrated 1992–2006, scored 2007–2022** | **0.547** | **58.6 %** |
+| calibrated 1992–2006, scored 2007–2022 | 0.547 | 58.6 % |
+| **GEMS-GER protocol: train 1991–2007, select 2008–2012, test 2013–2022** | **0.418** | **39.3 %** |
 
-The second row is the one to quote. The best benchmark published with
-GEMS-GER, a global LSTM with dynamic and static inputs, reaches NSE above 0.5
-for 52 % of wells nationally.
+**Only the third row is comparable, and it is the one to quote.** The split in
+the first two rows was chosen here; the third is the one the benchmark
+actually uses, confirmed by Marc Ohmer (KIT) on 16 November 2026. Under that
+protocol the published models reach a median NSE of 0.52 (single-well CNN,
+52 % of wells above 0.5) and 0.50 (global LSTM with dynamic and static
+inputs).
 
-So a three-parameter interpretable process model is **comparable to** a deep
-learning benchmark here. It is not a like-for-like comparison: different
-subset, different split, different evaluation protocol. The honest claim is
-that interpretability does not appear to cost much accuracy on this problem,
-not that the simple model wins.
+**The three-parameter model is therefore below the published benchmark, not
+comparable to it.** An earlier version of this file claimed parity on the
+strength of the 0.547 figure. That claim is withdrawn. The difference is the
+protocol alone: rerunning the old split on the same code reproduces 0.547 and
+58.6 % exactly, so no bug is involved.
+
+What the split exposes is worth keeping. With parameters held fixed, the model
+scores 0.555 on training, 0.587 on validation (2008–2012) and 0.418 on test
+(2013–2022), with 11.4 % of wells going negative in the test window against
+2.9 % in validation. Degradation of that size between two out-of-sample
+windows is either a property of 2013–2022, which contains the 2018–2020
+drought, or a limit of the model. **The two cannot be separated from this
+table alone.** The test is whether the published benchmark models degrade the
+same way on the same wells, which is a direct comparison on open data and has
+not been published.
+
+Fitted parameters on this protocol: soil storage 203 mm, fast residence time
+2 weeks, slow residence time 70 weeks, all medians.
 
 Fitted parameters are physically sensible and regionally ordered: soil storage
 172 mm in the lowlands, 203 mm in the hill country, 239 mm in the uplands.

@@ -75,12 +75,15 @@ from 1991 to 2022, taken from the open GEMS-GER reference dataset.
   **not supported**. Once winter precipitation is controlled for, the time
   trend disappears in all four definitions of the recharge measure that were
   tested.
-- A three-parameter interpretable process model, calibrated on 1992 to 2006
-  and scored on the unseen 2007 to 2022, reaches NSE above 0.5 for **59
-  percent** of wells. The deep-learning benchmark published with GEMS-GER
-  reaches 52 percent nationally. The two are not measured on the same subset
-  or the same split, so the fair reading is that interpretability does not
-  appear to cost much accuracy here, not that the simple model wins.
+- A three-parameter interpretable process model, run on the **benchmark's own
+  protocol** (train 1991 to 2007, select on 2008 to 2012, test on 2013 to
+  2022), reaches a median NSE of **0.42** against **0.52** for the published
+  single-well CNN. The simple model is behind, and an earlier version of this
+  README claimed otherwise on the strength of a self-chosen split.
+- It scores 0.59 on validation and 0.42 on test with identical parameters.
+  Whether that degradation is the 2013 to 2022 period or the model is an open
+  question, and comparing it against the published models on the same wells is
+  the next piece of work.
 
 Full detail, including what was retracted and why, is in
 [`docs/FINDINGS.md`](docs/FINDINGS.md).
