@@ -75,15 +75,15 @@ from 1991 to 2022, taken from the open GEMS-GER reference dataset.
   **not supported**. Once winter precipitation is controlled for, the time
   trend disappears in all four definitions of the recharge measure that were
   tested.
-- A three-parameter interpretable process model, run on the **benchmark's own
-  protocol** (train 1991 to 2007, select on 2008 to 2012, test on 2013 to
-  2022), reaches a median NSE of **0.42** against **0.52** for the published
-  single-well CNN. The simple model is behind, and an earlier version of this
-  README claimed otherwise on the strength of a self-chosen split.
-- It scores 0.59 on validation and 0.42 on test with identical parameters.
-  Whether that degradation is the 2013 to 2022 period or the model is an open
-  question, and comparing it against the published models on the same wells is
-  the next piece of work.
+- A three-parameter interpretable process model, scored on the **benchmark's
+  own protocol and its own formula**, reaches a median NSE of **0.55** on the
+  140 Saxon wells. The three published models reach 0.64, 0.62 and 0.60 on the
+  same wells. The simple model is behind all of them, though it is within
+  0.02 of the dynamic-only LSTM and beats it on 45 percent of wells.
+- It shares a failure mode with them. Bias over all test weeks is +0.02 m, but
+  +0.37 m in the lowest decile of observations and +0.28 m at annual minima,
+  and **all 140 wells** overestimate their minima more than their average.
+  Models that share nothing but their forcing fail in the same place.
 
 Full detail, including what was retracted and why, is in
 [`docs/FINDINGS.md`](docs/FINDINGS.md).

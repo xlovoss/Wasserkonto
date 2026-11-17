@@ -122,37 +122,53 @@ groundwater reservoirs. Three fitted parameters: storage capacity, a fast
 residence time and a slow one, with the two weights and the level obtained by
 least squares.
 
-| | NSE median | above 0.5 |
-|---|---|---|
-| calibrated and scored on 1992–2022 | 0.640 | 83.6 % |
-| calibrated 1992–2006, scored 2007–2022 | 0.547 | 58.6 % |
-| **GEMS-GER protocol: train 1991–2007, select 2008–2012, test 2013–2022** | **0.418** | **39.3 %** |
+Scored exactly as the GEMS-GER supplement prescribes: all 521 test weeks from
+2013-01-07 to 2022-12-26, imputed values included, and an NSE denominator
+built from the **historical 1991–2012 mean** rather than the mean of the test
+window. That last detail is not a convention this project chose, and it is not
+cosmetic. Test-period levels are lower than the historical mean, so the
+denominator is larger and the score higher.
 
-**Only the third row is comparable, and it is the one to quote.** The split in
-the first two rows was chosen here; the third is the one the benchmark
-actually uses, confirmed by Marc Ohmer (KIT) on 16 November 2026. Under that
-protocol the published models reach a median NSE of 0.52 (single-well CNN,
-52 % of wells above 0.5) and 0.50 (global LSTM with dynamic and static
-inputs).
+All four rows below are the same 140 Saxon wells, the same weeks, the same
+formula.
 
-**The three-parameter model is therefore below the published benchmark, not
-comparable to it.** An earlier version of this file claimed parity on the
-strength of the 0.547 figure. That claim is withdrawn. The difference is the
-protocol alone: rerunning the old split on the same code reproduces 0.547 and
-58.6 % exactly, so no bug is involved.
+| Model on the 140 Saxon wells | NSE median | above 0.5 | RMSE median | Bias median |
+|---|---|---|---|---|
+| GEMS-GER single-well CNN | 0.635 | 78.6 % | 0.282 m | +0.041 m |
+| GEMS-GER global LSTM, dyn + static | 0.616 | 74.3 % | 0.308 m | +0.031 m |
+| GEMS-GER global LSTM, dynamic only | 0.596 | 67.1 % | 0.312 m | +0.021 m |
+| **This model, three parameters** | **0.546** | **62.9 %** | **0.323 m** | **+0.017 m** |
 
-What the split exposes is worth keeping. With parameters held fixed, the model
-scores 0.555 on training, 0.587 on validation (2008–2012) and 0.418 on test
-(2013–2022), with 11.4 % of wells going negative in the test window against
-2.9 % in validation. Degradation of that size between two out-of-sample
-windows is either a property of 2013–2022, which contains the 2018–2020
-drought, or a limit of the model. **The two cannot be separated from this
-table alone.** The test is whether the published benchmark models degrade the
-same way on the same wells, which is a direct comparison on open data and has
-not been published.
+Per well, the process model beats the single-well CNN on 34 % of wells, the
+dynamic-only LSTM on 45 %, and the dyn+static LSTM on 40 %. Median differences
+are −0.088, −0.019 and −0.056.
 
-Fitted parameters on this protocol: soil storage 203 mm, fast residence time
-2 weeks, slow residence time 70 weeks, all medians.
+**So the model is behind all three, and the margin against the weakest of them
+is small.** Three earlier claims about this number are withdrawn: parity with
+the benchmark (wrong split), 0.418 (correct split, wrong denominator), and any
+comparison of a Saxon figure against the published national medians of
+0.52/0.50/0.44. Saxony is an easier subset than Germany as a whole, which the
+table above shows directly: all three published models score far better here
+than nationally.
+
+### A failure mode the model shares with the benchmark
+
+Marc Ohmer (KIT) reported that the benchmark models struggle with the late
+recession limb and overestimate annual minima, and asked whether the process
+model does the same. It does, and more plainly than the aggregate bias
+suggests.
+
+| | Bias, median over wells |
+|---|---|
+| all 521 test weeks | +0.017 m |
+| observations in the lowest decile | +0.365 m |
+| annual minima | +0.279 m |
+
+**Every one of the 140 wells overestimates its annual minima more than its
+average.** A conceptual three-parameter water balance and a convolutional
+network, which share nothing but their forcing, fail in the same place and in
+the same direction. That points away from model architecture and toward either
+the forcing or the rarity of such low levels before 2013.
 
 Fitted parameters are physically sensible and regionally ordered: soil storage
 172 mm in the lowlands, 203 mm in the hill country, 239 mm in the uplands.
