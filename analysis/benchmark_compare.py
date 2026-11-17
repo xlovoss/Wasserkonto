@@ -71,7 +71,7 @@ def fit_coefficients(gi: np.ndarray, gj: np.ndarray, y: np.ndarray):
     return float(coef[0]), float(coef[1]), float(y.mean() - coef[0] * gi.mean() - coef[1] * gj.mean())
 
 
-def evaluate_well(path: str) -> dict | None:
+def evaluate_well(path: str, sim_only: bool = False):
     d = pd.read_csv(path, parse_dates=["Unnamed: 0"]).rename(
         columns={"Unnamed: 0": "date"}).sort_values("date").reset_index(drop=True)
     year = d["date"].dt.year.to_numpy()
@@ -110,6 +110,8 @@ def evaluate_well(path: str) -> dict | None:
                     best_v, best = v, (sim, float(C_GRID[ci]), float(taus[i]), float(taus[j]))
     if best is None:
         return None
+    if sim_only:
+        return d, best[0]
     sim, cap, tf, ts = best
 
     obs_te, sim_te = gwl[m_te], sim[m_te]
@@ -186,6 +188,11 @@ def main() -> None:
     print()
     print("Benchmark-Bias je Modell (alle Testwochen, Median): "
           + ", ".join(f"{n} {b.Bias.median():+.3f}" for n, b in bench.items()))
+
+
+def evaluate_well_sim(path: str):
+    """Nur die angepasste Simulation, fuer weitergehende Diagnosen."""
+    return evaluate_well(path, sim_only=True)
 
 
 if __name__ == "__main__":

@@ -167,8 +167,55 @@ suggests.
 **Every one of the 140 wells overestimates its annual minima more than its
 average.** A conceptual three-parameter water balance and a convolutional
 network, which share nothing but their forcing, fail in the same place and in
-the same direction. That points away from model architecture and toward either
-the forcing or the rarity of such low levels before 2013.
+the same direction.
+
+### What drives that error, and what does not
+
+Ohmer's explanation for the neural models is that comparably low levels were
+rare or absent in training. For a three-parameter water balance that argument
+does not transfer: it learns no value range, it integrates a balance. So the
+error was split by two candidate causes.
+
+Each annual minimum in the test window is measured against that well's
+**minimum during calibration** (1991–2007), and both the shortfall and the
+model error are expressed in units of that well's own standard deviation
+during calibration, so that wells with large swings do not dominate.
+
+| Annual minimum falls below the calibration minimum by | n | median error |
+|---|---|---|
+| it does not | 1197 | 0.56 sd |
+| 0 to 0.25 sd | 82 | 1.14 sd |
+| 0.25 to 0.5 sd | 56 | 1.40 sd |
+| 0.5 to 1 sd | 44 | 1.89 sd |
+| more than 1 sd | 21 | 3.23 sd |
+
+Pearson r = +0.63, Spearman +0.52. In metres the medians run from 0.22 m to
+2.48 m across the same buckets.
+
+**Length of the recession explains nothing** (r = +0.008). It is not that long
+recessions flatten out. It is specifically leaving the range the parameters
+were fitted in.
+
+So both model families fail for the same reason, by the same measure, though
+the mechanism cannot be the same. A network extrapolates outside its training
+distribution; a water balance extrapolates with parameters calibrated to a
+regime, and a linear reservoir empties exponentially toward a fixed level that
+deep droughts undercut.
+
+**This is testable.** A storage-dependent, non-linear outflow should reduce
+the deep-minimum bias while leaving ordinary years untouched. If it does, the
+structure is the cause here, and the agreement with the neural models is a
+coincidence of symptom rather than of mechanism.
+
+### A note on the standardised overview figure
+
+In Ohmer's figure of all 3,207 wells, z is formed over 1991–2022, so the low
+test years are inside the reference mean and shrink the very anomaly the
+figure shows. On the 140 Saxon wells the median test-window anomaly is −0.28
+standard deviations against the full period, and **−0.42 against 1991–2012
+alone**, a factor of 1.5. The same point explains the NSE denominator: the
+benchmark references 1991–2012, which is why scores computed that way sit
+above scores computed against the test-window mean.
 
 Fitted parameters are physically sensible and regionally ordered: soil storage
 172 mm in the lowlands, 203 mm in the hill country, 239 mm in the uplands.
