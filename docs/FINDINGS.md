@@ -165,9 +165,29 @@ suggests.
 | annual minima | +0.279 m |
 
 **Every one of the 140 wells overestimates its annual minima more than its
-average.** A conceptual three-parameter water balance and a convolutional
-network, which share nothing but their forcing, fail in the same place and in
-the same direction.
+average.**
+
+With the supplement's `median_predictions.csv.gz` the same diagnostic runs on
+the three published models, so this is now measured for all four rather than
+measured for one and quoted for the rest.
+
+| Model | bias, all weeks | lowest decile | annual minima | wells where minima are worse than average |
+|---|---|---|---|---|
+| single-well CNN | +0.025 m | +0.180 m | +0.160 m | 92.1 % |
+| global LSTM, dyn + static | +0.029 m | +0.293 m | +0.241 m | 98.6 % |
+| global LSTM, dynamic only | +0.014 m | +0.307 m | +0.250 m | 99.3 % |
+| three-parameter water balance | +0.017 m | +0.365 m | +0.279 m | 100.0 % |
+
+**All four fail in the same place and in the same direction**, and the
+severity tracks overall skill: the strongest model is least affected, the
+simplest most. On the 65 wells whose annual minimum drops below the
+calibration-period minimum at least once, the error at those minima is +1.08,
++1.51, +1.47 and +1.61 standard deviations respectively — the same order of
+magnitude for a convolutional network and for three fitted parameters.
+
+Nearly half the wells, 65 of 140, went below anything seen in 1991–2007 during
+the test decade. That is the scale of the regime change the models are being
+asked to extrapolate into.
 
 ### What drives that error, and what does not
 
