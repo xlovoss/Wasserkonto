@@ -132,24 +132,46 @@ denominator is larger and the score higher.
 All four rows below are the same 140 Saxon wells, the same weeks, the same
 formula.
 
+All figures below use **GEMS-GER v5** and the **revised 20-member benchmark
+scores**, which replaced the ones printed in Table 3 of the paper.
+
 | Model on the 140 Saxon wells | NSE median | above 0.5 | RMSE median | Bias median |
 |---|---|---|---|---|
-| GEMS-GER single-well CNN | 0.635 | 78.6 % | 0.282 m | +0.041 m |
-| GEMS-GER global LSTM, dyn + static | 0.616 | 74.3 % | 0.308 m | +0.031 m |
-| GEMS-GER global LSTM, dynamic only | 0.596 | 67.1 % | 0.312 m | +0.021 m |
-| **This model, three parameters** | **0.546** | **62.9 %** | **0.323 m** | **+0.017 m** |
+| GEMS-GER global LSTM, dyn + static | 0.634 | 77.9 % | 0.298 m | +0.029 m |
+| GEMS-GER single-well CNN | 0.629 | 76.4 % | 0.286 m | +0.025 m |
+| GEMS-GER global LSTM, dynamic only | 0.612 | 69.3 % | 0.304 m | +0.014 m |
+| **This model, three parameters** | **0.549** | **63.6 %** | **0.320 m** | **+0.015 m** |
 
-Per well, the process model beats the single-well CNN on 34 % of wells, the
-dynamic-only LSTM on 45 %, and the dyn+static LSTM on 40 %. Median differences
-are −0.088, −0.019 and −0.056.
+Per well, the process model beats the single-well CNN on 35.7 % of wells, the
+dynamic-only LSTM on 42.9 %, and the dyn+static LSTM on 37.1 %. Median
+differences are −0.085, −0.033 and −0.074.
 
 **So the model is behind all three, and the margin against the weakest of them
 is small.** Three earlier claims about this number are withdrawn: parity with
 the benchmark (wrong split), 0.418 (correct split, wrong denominator), and any
-comparison of a Saxon figure against the published national medians of
-0.52/0.50/0.44. Saxony is an easier subset than Germany as a whole, which the
-table above shows directly: all three published models score far better here
-than nationally.
+comparison of a Saxon figure against the national medians, which in the revised
+scores are 0.518, 0.493 and 0.440. Saxony is an easier subset than Germany as a
+whole, which the table above shows directly: all three published models score
+far better here than nationally.
+
+### Two supplement updates, and one approximation that did not hold
+
+Two separate corrections landed on this dataset, and they are easy to confuse.
+
+**The data fix (v5).** Evaporation columns were weekly means of daily sums
+rather than weekly sums, and `DWD_soil_moist` had been divided by ten a second
+time. This project had been multiplying evaporation by seven as a stand-in.
+That was close but **not equivalent**: the median NSE moves only from 0.546 to
+0.549, yet 65 of the 140 wells shift by more than 0.001 and one by 0.69. The
+workaround is gone; `EVAPO_SCALE` is 1.0 and v5 is required.
+
+**The score revision.** The published Table 3 mixed two model runs with
+different aggregation orders. The replacement recalculates every metric from
+the pointwise median of a 20-member ensemble. On the Saxon wells it moves the
+single-well CNN by −0.006 and both LSTMs by about +0.017, enough to reorder
+them: the dyn+static LSTM now edges out the CNN here. The supplement also
+switched its CSV separator from semicolon to comma, which is why the reader
+sniffs it.
 
 ### A failure mode the model shares with the benchmark
 

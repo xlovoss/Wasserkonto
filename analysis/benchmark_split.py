@@ -32,6 +32,7 @@ import numpy as np
 import pandas as pd
 from transfer_model import (
     C_GRID,
+    EVAPO_SCALE,
     TAU_FAST,
     TAU_SLOW,
     WARMUP_WEEKS,
@@ -101,7 +102,7 @@ def evaluate_well(path: str) -> dict | None:
         return None
 
     runoff = soil_runoff(d["HYRAS_pr"].to_numpy(float),
-                         d["DWD_evapo_p"].to_numpy(float) * 7.0,
+                         d["DWD_evapo_p"].to_numpy(float) * EVAPO_SCALE,
                          C_GRID)
     taus = np.concatenate([TAU_FAST, TAU_SLOW])
     G = np.stack([reservoir(runoff, t) for t in taus])   # (tau, Zeit, C)

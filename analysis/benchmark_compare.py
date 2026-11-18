@@ -28,6 +28,7 @@ import numpy as np
 import pandas as pd
 from transfer_model import (
     C_GRID,
+    EVAPO_SCALE,
     TAU_FAST,
     TAU_SLOW,
     WARMUP_WEEKS,
@@ -86,7 +87,7 @@ def evaluate_well(path: str, sim_only: bool = False):
         return None
 
     runoff = soil_runoff(d["HYRAS_pr"].to_numpy(float),
-                         d["DWD_evapo_p"].to_numpy(float) * 7.0, C_GRID)
+                         d["DWD_evapo_p"].to_numpy(float) * EVAPO_SCALE, C_GRID)
     taus = np.concatenate([TAU_FAST, TAU_SLOW])
     G = np.stack([reservoir(runoff, t) for t in taus])
     n_fast = len(TAU_FAST)
@@ -151,7 +152,9 @@ def main() -> None:
     for name, fn in (("single", "model_performance_single.csv"),
                      ("dynonly", "model_performance_global_dynonly.csv"),
                      ("dynstat", "model_performance_global_dynstat.csv")):
-        b = pd.read_csv(os.path.join(PERF, fn), sep=";")
+        # Das Trennzeichen hat sich zwischen den Fassungen des Supplements
+        # geaendert, erst Semikolon, in der revidierten Fassung Komma.
+        b = pd.read_csv(os.path.join(PERF, fn), sep=None, engine="python")
         bench[name] = b[b["ID"].isin(mine["ID"])].set_index("ID")
 
     print(f"Messstellen: {len(mine)}  (von {len(bench['single'])} im Benchmark gefunden)")

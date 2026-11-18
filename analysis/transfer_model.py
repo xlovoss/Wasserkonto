@@ -34,6 +34,14 @@ DYN = os.environ.get("GEMS_GER_DYN", "data/gems-ger/dynamic")
 INVENTAR = os.environ.get("WK_INVENTORY", "data/sachsen_inventar.csv")
 OUT = os.environ.get("WK_OUT", "output")
 
+# GEMS-GER v5 liefert die Verdunstung als Wochensumme, passend zum Niederschlag.
+# Bis v4 war es ein Tagesmittel in mm/Tag; dort war EVAPO_SCALE = 7.0 noetig.
+# Diese Naeherung ist nicht gleichwertig: sie traf den Median auf 0,003 NSE,
+# wich aber bei 65 von 140 Messstellen um mehr als 0,001 ab, im Extremfall um
+# 0,69. Mit v5 ist sie hinfaellig.
+EVAPO_SCALE = 1.0
+
+
 C_GRID = np.unique(np.round(np.geomspace(20, 900, 24)))
 TAU_FAST = np.array([1.0, 2.0, 3.0, 4.0, 6.0, 8.0, 12.0])
 TAU_SLOW = np.array([20.0, 30.0, 45.0, 70.0, 100.0, 150.0, 220.0, 300.0])
@@ -59,7 +67,7 @@ def reservoir(runoff: np.ndarray, tau: float) -> np.ndarray:
 def fit_well(df: pd.DataFrame, score_slice: slice | None = None) -> dict:
     """Beste Kombination aus C, tau_fast und tau_slow fuer eine Messstelle."""
     precip = df["HYRAS_pr"].to_numpy(float)
-    etp = df["DWD_evapo_p"].to_numpy(float) * 7.0   # mm/Tag -> mm/Woche
+    etp = df["DWD_evapo_p"].to_numpy(float) * EVAPO_SCALE
     gwl = df["GWL"].to_numpy(float)
 
     runoff = soil_runoff(precip, etp, C_GRID)
@@ -118,7 +126,7 @@ def fit_well(df: pd.DataFrame, score_slice: slice | None = None) -> dict:
 
 def simulate(df: pd.DataFrame, p: dict) -> np.ndarray:
     runoff = soil_runoff(df["HYRAS_pr"].to_numpy(float),
-                         df["DWD_evapo_p"].to_numpy(float) * 7.0,
+                         df["DWD_evapo_p"].to_numpy(float) * EVAPO_SCALE,
                          np.array([p["C"]]))
     fast = reservoir(runoff, p["tau_fast"])[:, 0]
     slow = reservoir(runoff, p["tau_slow"])[:, 0]

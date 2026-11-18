@@ -77,9 +77,10 @@ from 1991 to 2022, taken from the open GEMS-GER reference dataset.
   tested.
 - A three-parameter interpretable process model, scored on the **benchmark's
   own protocol and its own formula**, reaches a median NSE of **0.55** on the
-  140 Saxon wells. The three published models reach 0.64, 0.62 and 0.60 on the
-  same wells. The simple model is behind all of them, though it is within
-  0.02 of the dynamic-only LSTM and beats it on 45 percent of wells.
+  140 Saxon wells. The three published models reach 0.63, 0.63 and 0.61 on the
+  same wells. The simple model is behind all of them, though it beats the
+  dynamic-only LSTM on 43 percent of wells. Figures use GEMS-GER v5 and the
+  revised benchmark scores.
 - It shares a failure mode with them. Bias over all test weeks is +0.02 m, but
   +0.37 m in the lowest decile of observations and +0.28 m at annual minima,
   and **all 140 wells** overestimate their minima more than their average.
